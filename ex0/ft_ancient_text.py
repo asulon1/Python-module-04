@@ -6,21 +6,27 @@
 #  By: asulon <asulon@student.42nice.fr>         +#+  +:+       +#+         #
 #                                              +#+#+#+#+#+   +#+            #
 #  Created: 0026/03/08 00:24:33 by sulon           #+#    #+#               #
-#  Updated: 2026/03/08 00:55:09 by asulon          ###   ########.fr        #
+#  Updated: 2026/04/14 22:55:39 by asulon          ###   ########.fr        #
 #                                                                           #
 # ************************************************************************* #
 
-print("=== CYBER ARCHIVES - DATA RECOVERY SYSTEM ===")
+import sys
 
-file = None
-file_name = "ancient_fragment.txt"
-try:
-    with open(file_name) as file:
-        print(f"Accessing Storage Vault: {file_name}")
-        print("Connection established...\n")
-        print("RECOVERED DATA:")
-        print(f"{file.read()}\n")
-        print("Data recovery complete. Storage unit disconnected.")
+if len(sys.argv) == 2:
+    print("=== CYBER ARCHIVES RECOVERY  ===")
+    file_name = sys.argv[1]
+    try:
+        print(f"Accessing file '{file_name}'")
+        with open(file_name) as file:
+            print("---\n")
+            print(f"{file.read()}\n")
+            print("---")
+            print("File 'ancient_fragment.txt' closed")
 
-except FileNotFoundError:
-    print("ERROR: Storage vault not found. Run data generator first.")
+            file.close()
+
+    except (FileNotFoundError, PermissionError) as error:
+        print(
+            f"Error: opening file {file_name}: {error}")
+else:
+    print("Usage: ft_ancient_text.py <file>")

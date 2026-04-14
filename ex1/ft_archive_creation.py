@@ -6,29 +6,49 @@
 #  By: asulon <asulon@student.42nice.fr>         +#+  +:+       +#+         #
 #                                              +#+#+#+#+#+   +#+            #
 #  Created: 0026/03/08 00:24:33 by sulon           #+#    #+#               #
-#  Updated: 2026/03/08 00:58:10 by asulon          ###   ########.fr        #
+#  Updated: 2026/04/15 00:53:05 by asulon          ###   ########.fr        #
 #                                                                           #
 # ************************************************************************* #
 
-file_name = "new_discovery.txt"
-entry_list = [
-    "[ENTRY 001] New quantum algorithm discovered",
-    "[ENTRY 002] Efficiency increased by 347%",
-    "[ENTRY 003] Archived by Data Archivist trainee",
-]
+import sys
 
-print("=== CYBER ARCHIVES - PRESERVATION SYSTEM ===")
-print(f"Initializing new storage unit: {file_name}")
+if len(sys.argv) == 2:
+    print("=== CYBER ARCHIVES RECOVERY  ===")
+    file_name = sys.argv[1]
+    try:
+        print(f"Accessing file '{file_name}'")
+        with open(file_name) as file:
+            print("---\n")
+            print(f"{file.read()}\n")
+            print("---")
+            print("File 'ancient_fragment.txt' closed\n")
+            file.close()
 
-try:
-    with open(file_name, "w") as file:
-        print("Storage unit created successfully....\n")
-        print("Inscribing preservation data...")
-        for entry in entry_list:
-            file.write(f"{entry}\n")
-            print(f"{entry}")
-        print("\nData inscription complete. Storage unit sealed.")
-        print(f"Archive '{file_name}' ready for long-term preservation.")
+        # Get lines
+        file_lines = []
+        with open(file_name) as file:
+            file_lines = file.readlines()
+            file_lines = [line.rstrip('\n') + "#\n" for line in file_lines]
+            file.close()
+        print("Transform data:")
+        print("---\n")
+        for data in file_lines:
+            print(data, end='')
+        print("\n---\n")
 
-except (FileNotFoundError, PermissionError) as error:
-    print(f"CRITICAL ERROR: System integrity compromised. {error}")
+        # Save new lines data
+        new_file_name = input("Enter new file name (or empty): ")
+        if new_file_name and len(new_file_name.strip()) > 0:
+            with open(new_file_name, "w") as update_file:
+                print(f"Saving data to {new_file_name}")
+                for line in file_lines:
+                    update_file.write(line)
+                print(f"Data saved in file {new_file_name}.")
+                update_file.close()
+        else:
+            print("Not saving data.")
+    except (FileNotFoundError, PermissionError) as error:
+        print(
+            f"Error: opening file {file_name}: {error}")
+else:
+    print("Usage: ft_ancient_text.py <file>")
